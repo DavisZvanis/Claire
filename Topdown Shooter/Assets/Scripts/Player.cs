@@ -5,15 +5,26 @@ using UnityEngine;
 [RequireComponent (typeof(PlayerController))] //force to add script 
 [RequireComponent(typeof(GunController))] //force to add script 
 
-public class Player : MonoBehaviour {
+public class Player : LivingEntity {
 
     Camera viewCamera;
     public float moveSpeed = 5;
     PlayerController controller;
     GunController gunController;
 
-	// Use this for initialization
-	void Start () {
+    void OnTriggerEnter(Collider col)
+    {
+
+        if (col.gameObject.name == "AmmoPack")
+        {
+            
+            Destroy(col.gameObject);
+            gunController.GainAmmo(100);
+        }
+    }
+    // Use this for initialization
+    protected override void Start () {
+        base.Start();                 //Calls base class in Living Entity start()
         controller = GetComponent<PlayerController>();
         gunController = GetComponent<GunController>();
         viewCamera = Camera.main;
@@ -40,6 +51,8 @@ public class Player : MonoBehaviour {
             {
                 gunController.Shoot();
             }
+            
         }
-	}
+        
+    }
 }
