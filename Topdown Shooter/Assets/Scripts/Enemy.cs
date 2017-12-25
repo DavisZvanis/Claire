@@ -8,6 +8,8 @@ public class Enemy : LivingEntity {
     NavMeshAgent pathfinder;
     Transform target;
 
+    float attackDistanceThreshold = 1.5f;
+
 	// Use this for initialization
 	protected override void Start () {
         base.Start();
@@ -19,9 +21,10 @@ public class Enemy : LivingEntity {
 	
 	// Update is called once per frame
 	void Update () {
+        
  
 	}
-
+    // So update not on every frame
     IEnumerator UpdatePath()
     {
         float refreshRate = 1;

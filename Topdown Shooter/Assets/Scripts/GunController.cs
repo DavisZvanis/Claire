@@ -9,7 +9,7 @@ public class GunController : MonoBehaviour {
     public Transform weaponHold;
     public Gun startingGun;
     Gun equippedGun;
-    private int ammo = 100;
+    private int ammo = 100000;
 
     void Start()
     {
@@ -29,6 +29,7 @@ public class GunController : MonoBehaviour {
         equippedGun = Instantiate(gunToEquip, weaponHold.position,weaponHold.rotation) as Gun;
         equippedGun.transform.parent = weaponHold;
     }
+
     public void Shoot()
     {
         if(equippedGun != null && ammo >= 0)
