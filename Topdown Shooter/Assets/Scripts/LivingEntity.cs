@@ -5,8 +5,12 @@ using UnityEngine;
 public class LivingEntity : MonoBehaviour, IDamagable
 {
     public float startinghealth;
-    protected float health;
-    protected bool dead;
+    public float health;
+    public bool dead;
+    public float hunger;
+    public float temperture;
+    public float water;
+    public bool isBleeding;
 
     public event System.Action OnDeath;
 
@@ -17,14 +21,17 @@ public class LivingEntity : MonoBehaviour, IDamagable
 
     public void TakeHit(float damage, RaycastHit hit)
     {
+        TakeDamage(damage);
+    }
+    public void TakeDamage (float damage)
+    {
         health -= damage;
 
-        if(health <= 0 && !dead)
+        if (health <= 0 && !dead)
         {
             Die();
         }
     }
-
     protected void Die()
     {
         dead = true;
@@ -33,5 +40,11 @@ public class LivingEntity : MonoBehaviour, IDamagable
             OnDeath();
         }
         GameObject.Destroy(gameObject);
+    }
+    public void UpdatePlayerStatus(float hp,float hung, float watr)
+    {
+        health += hp;
+        hunger += hung;
+        water += watr;
     }
 }

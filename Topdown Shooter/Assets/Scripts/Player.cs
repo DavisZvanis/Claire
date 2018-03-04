@@ -2,57 +2,96 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent (typeof(PlayerController))] //force to add script 
 [RequireComponent(typeof(GunController))] //force to add script 
 
 public class Player : LivingEntity {
 
-    Camera viewCamera;
-    public float moveSpeed = 5;
-    PlayerController controller;
+    Animator animator;
+
+    public Hud hud;
+    public Inventory inventory;
     GunController gunController;
+    public Gun chosenGun;
+    private Interactable interactable = null;
 
-    void OnTriggerEnter(Collider col)
-    {
+    public float rotationSpeed = 100.0f;
+    public float Speed = 100f;
+    private bool isEquiped = true;
+    private Item itemToPickUp = null;
 
-        if (col.gameObject.name == "AmmoPack")
-        {
-            
-            Destroy(col.gameObject);
-            gunController.GainAmmo(100);
-        }
-    }
+
     // Use this for initialization
     protected override void Start () {
         base.Start();                 //Calls base class in Living Entity start()
-        controller = GetComponent<PlayerController>();
         gunController = GetComponent<GunController>();
-        viewCamera = Camera.main;
+        animator = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
         //movement input
-        Vector3 moveInput = new Vector3(Input.GetAxisRaw("Horizontal"),0,Input.GetAxisRaw("Vertical"));
-        Vector3 moveVelocity = moveInput.normalized * moveSpeed;
-        controller.Move(moveVelocity);
+        float translation = Input.GetAxis("Vertical") * Speed * Time.deltaTime;
+        float rotation = Input.GetAxis("Horizontal") * rotationSpeed * Time.deltaTime;
 
-        //look input
-        Ray ray = viewCamera.ScreenPointToRay(Input.mousePosition);
-        Plane groundPlane = new Plane(Vector3.up,Vector3.zero);
-        float rayDistance;
+        animator.SetFloat("Move", translation);
+        animator.SetFloat("Rotate", rotation);
 
-        if(groundPlane.Raycast(ray, out rayDistance)){
-            Vector3 point = ray.GetPoint(rayDistance);
-            controller.LookAt(point);
+        playerMove(translation, rotation, isEquiped);
 
-        //gun input
-        if (Input.GetMouseButton(0))
-            {
-                gunController.Shoot();
-            }
-            
+        if (isEquiped == true && Input.GetKeyDown("space"))
+        {
+            gunController.Shoot();
+        }
+        if (isEquiped == true && Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            gunController.UnequipGun();
+            isEquiped = false;
+        }
+        if (Input.GetKeyDown(KeyCode.C) && itemToPickUp != null)
+        {
+            inventory.AddItem(itemToPickUp);
+            itemToPickUp = null;
+            interactable.OnPickUp();
+            hud.CloseMessagePanel();
         }
         
+
+    }
+    public void playerMove(float trans, float rot, bool equipped)
+    {
+        if(equipped == false)
+        {
+            transform.Translate(0, 0, trans);
+            transform.Rotate(0, rot, 0);
+        }
+        else
+        {
+            transform.Rotate(0, rot, 0);
+        }
+
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        interactable = other.GetComponent<Interactable>();
+        if (interactable!= null)
+        {
+            hud.OpenMessagePanel();
+            itemToPickUp = interactable.GetItem();
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        Interactable item = other.GetComponent<Interactable>();
+        if (item != null)
+        {
+            hud.CloseMessagePanel();
+            itemToPickUp = null;
+        }
+    }
+    public void UsingItem(Item item)
+    {
+        this.UpdatePlayerStatus(item.health,item.hunger,item.water);
     }
 }
+

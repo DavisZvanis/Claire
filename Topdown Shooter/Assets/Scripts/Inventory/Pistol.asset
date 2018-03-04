@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 747c84f0af090634fb9f5308954b220c, type: 3}
+  m_Name: Pistol
+  m_EditorClassIdentifier: 
+  name: Pistol
+  sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  itemObject: {fileID: 1795884242182394, guid: b7a19484df045e5409eb8cbb65da09a5, type: 2}
+  health: 0
+  hunger: 0
+  water: 0
+  isBandage: 0
+  isGun: 1
