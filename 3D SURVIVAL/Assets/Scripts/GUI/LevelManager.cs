@@ -28,7 +28,18 @@ public class LevelManager : MonoBehaviour {
         fadeDir = direction;
         return (fadeSpeed);
     }
-    void OnLevelWasLoaded()
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         BeginFade(-1);
     }

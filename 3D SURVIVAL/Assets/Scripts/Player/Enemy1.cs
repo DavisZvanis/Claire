@@ -6,7 +6,6 @@ using UnityEngine.AI;
 public class Enemy1 : LivingEntity {
 
     public enum State { Idle, Chasing, Attacking, Patrolling};
-    State currentState;
 
     NavMeshAgent pathfinder;
     public Transform target;
@@ -32,7 +31,7 @@ public class Enemy1 : LivingEntity {
         base.Start();
         pathfinder = GetComponent<NavMeshAgent>();
        
-        currentState = State.Patrolling;
+ //       currentState = State.Patrolling;
         target = GameObject.FindGameObjectWithTag("Player").transform;
         targetEntity = target.GetComponent<Player>();
         myCollisionRadius = GetComponent<CapsuleCollider>().radius;
@@ -50,7 +49,7 @@ public class Enemy1 : LivingEntity {
 
     void OnTargetDeath()
     {
-        currentState = State.Idle;
+    //    currentState = State.Idle;
     }
   
 	
@@ -59,7 +58,7 @@ public class Enemy1 : LivingEntity {
 
     IEnumerator Attack()
     {
-        currentState = State.Attacking;
+   //     currentState = State.Attacking;
         pathfinder.enabled = false;
 
         Vector3 originalPosition = transform.position;
@@ -84,7 +83,7 @@ public class Enemy1 : LivingEntity {
 
             yield return null;
 
-            currentState = State.Chasing;
+   //         currentState = State.Chasing;
             pathfinder.enabled = true;
         }
     }

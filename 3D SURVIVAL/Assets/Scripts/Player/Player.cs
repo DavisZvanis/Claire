@@ -100,7 +100,7 @@ public class Player : LivingEntity {
         }
         else if(dead && gameOver == false)
         {
-            Die();
+            DieNow();
         }
     }
     public void PlayerMove(float trans, float rot)
@@ -225,7 +225,7 @@ public class Player : LivingEntity {
     {
         animator.SetBool("Shooting", false);
     }
-    public void Die()
+    public void DieNow()
     {
         gameOver = true;
         animator.SetBool("Dead", true);
